@@ -1,20 +1,3 @@
-/*
-
-# TASKS
-
-- keep track of observers, and stop observing when a tab is removed (necessary? likely)
-
-- chatTabObserver causes a null object error occasionally - seems to do with switching back to a closed chat?
-
-ALSO, if there is no "unresponded" class, that will be added separate from the "unread" class
-mutation.target is live, where-as mutation.oldValue is static, and mutation callbacks are async
-SO both mutations will evalute true for "newly added unread class" (is unread in oldValue? is it present in target now?)
-this means unseenMessages should just be a boolean flag - getting set multiple times won't matter
-
-https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
-
-*/
-
 var chatTabObserver = new MutationObserver(function(mutations) {
 	mutations.forEach(function(mutation) {
 		// mutation.target is a LIVE element, and mutation callbacks are ASYNC
