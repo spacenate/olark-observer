@@ -1,35 +1,30 @@
 #!/usr/bin/env python
 
-import sys
+# Huge thanks to Farville for the tip to use have_fork=False!
+# http://www.farville.com/15-line-python-https-cgi-server/
+
 import CGIHTTPServer
+import ssl, os
+import cgitb; cgitb.enable() # Enable CGI error reporting
 
 def runServer(HandlerClass=CGIHTTPServer.CGIHTTPRequestHandler,
          ServerClass=CGIHTTPServer.BaseHTTPServer.HTTPServer):
-
-    protocol = "HTTP/1.0"
-    host = ''
-    port = 8000
-    if len(sys.argv) > 1:
-        arg = sys.argv[1]
-        if ':' in arg:
-            host, port = arg.split(':')
-            port = int(port)
-        else:
-            try:
-                port = int(sys.argv[1])
-            except:
-                host = sys.argv[1]
-
-    server_address = (host, port)
-
-    HandlerClass.protocol_version = protocol
-    HandlerClass.cgi_directories = ['/htbin']
-    httpd = ServerClass(server_address, HandlerClass)
-
+    
+    HandlerClass.protocol_version = "HTTP/1.0"
+    HandlerClass.cgi_directories = ['/cgibin']
+    
+    os.chdir("html")
+    
+    httpd = ServerClass(('localhost', 4443), HandlerClass)
+    httpd.socket = ssl.wrap_socket (httpd.socket, certfile='../lvh.me.pem', server_side=True)
+    # Force the use of a subprocess, rather than
+    # normal fork behavior since that doesn't work with ssl
+    HandlerClass.have_fork = False
+    
     sa = httpd.socket.getsockname()
-    print "Serving HTTP on", sa[0], "port", sa[1], "..."
+    print "Serving HTTPS on", sa[0], "port", sa[1], "..."
+    
     httpd.serve_forever()
-
 
 if __name__ == "__main__":
     runServer()

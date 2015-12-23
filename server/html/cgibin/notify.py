@@ -1,22 +1,18 @@
 #!/usr/bin/env python
+
 import os
-import cgitb
 import urlparse
 
 import uc
 
-# Enable error reporting
-cgitb.enable()
-
 # CGI scripts must output header manually
 print "Content-type: text/html"
 print
-
 # Content follows
 print "<h1>Hello world</h1>"
 
 # Example of calling function in uc module
-uc.meow("More text")
+uc.meow("But really though")
 
 # Grab query string using os and urlparse
 query = os.environ[ "QUERY_STRING" ]
