@@ -7,6 +7,7 @@ import uc
 
 # CGI scripts must output header manually
 print "Content-type: text/html"
+print "Access-Control-Allow-Origin: *"
 print
 # Content follows
 print "<h1>Hello world</h1>"
