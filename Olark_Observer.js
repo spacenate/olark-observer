@@ -109,6 +109,7 @@ var OlarkObserver = (function(OO) {
 				return false;
 		}
 	}
-	
+        
+        console.log("Observing!");	
 	return OO;
 }(OlarkObserver));
