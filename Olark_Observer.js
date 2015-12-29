@@ -68,7 +68,7 @@ var OlarkObserver = (function(OO) {
 			}
 		});
 	});
-	chatListObserver.observe(document.querySelector('#active-chats'), { childList: true})
+	chatListObserver.observe(document.querySelector('#active-chats'), { childList: true});
 	
 	/* New unread chats, while window is inactive */
 	var linkObserver = new MutationObserver(function(mutations) {  
