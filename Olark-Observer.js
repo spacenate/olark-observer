@@ -2,9 +2,7 @@ var OlarkObserver = (function(OO) {
 	"use strict";
 
 	// OlarkObserver already injected
-	if (OO !== undefined) return OO;
-
-	var OO = {};
+	if (object === typeof OO) return OO;
 
 	function sendXHR(newStatus) {
 		var oReq = new XMLHttpRequest();
@@ -126,6 +124,6 @@ var OlarkObserver = (function(OO) {
 		}
 	}
         
-        console.log("Observing!");	
-	return OO;
+    console.log("Observing!");
+	return {};
 }(OlarkObserver));
