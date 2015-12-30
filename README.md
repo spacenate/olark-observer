@@ -8,13 +8,11 @@ If such a thing existed, it would be sure to communicate these events to a local
 
 To run this Python server, one would first generate a self-signed certificate.
 
-    chmod +x generate_cert.sh
     ./generate_cert.sh
 
 Fill in whatever makes you happy, for the certificate details. Next change to the `src` directory, and contemplate executing the Python script.
 
     cd src
-    chmod +x observerServer.py
     ./observerServer.py
 
 The hardware design will probably borrow heavily from the V-USB examples, and it will likely use the V-USB library as well. ATtiny85 seems like a good choice for the microcontroller, with 3 pins and a timer left open after V-USB (I believe/hope).
