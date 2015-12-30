@@ -8,7 +8,7 @@ var OlarkObserver = (function(OO) {
 
 	function sendXHR(newStatus) {
 		var oReq = new XMLHttpRequest();
-		oReq.open("GET", "https://lvh.me:4443/cgibin/notify.py?" + newStatus, true);
+		oReq.open("PUT", "https://lvh.me:4443/" + newStatus, true);
 		oReq.send();
 	}
 
@@ -28,7 +28,7 @@ var OlarkObserver = (function(OO) {
 		}
 
 		if (newStatus) {
-			sendXHR("newOperatorStatus=" + newStatus);
+			sendXHR('status/' + newStatus);
 		}
 	})
 	statusObserver.observe(document.querySelector('#op-status-panel'), {childList: true});
@@ -50,10 +50,10 @@ var OlarkObserver = (function(OO) {
 
 				if (mutation.target.classList.contains("unread") && mutation.oldValue.indexOf("unread") === -1) {
 					// mutation.target just added the unread class
-					sendXHR("newUnseenMessage=" + tabName);
+					sendXHR('chats/' + tabName + '/1');
 				} else if (mutation.target.classList.contains("unread") === false && mutation.oldValue.indexOf("unread") !== -1) {
 					// mutation.target just removed the unread class
-					sendXHR("messagesSeen=" + tabName);
+					sendXHR('chats/' + tabName + '/0');
 				}
 			}
 		});
@@ -62,7 +62,7 @@ var OlarkObserver = (function(OO) {
 		// iterate over mutations to look for new chats (new child added to #active-chats)
 		mutations.forEach(function(mutation) {
 			if (mutation.type === "childList" && mutation.target.id === "active-chats" && mutation.addedNodes.length > 0) {
-				sendXHR("chatTabAdded=true")
+				sendXHR("chats/new/1")
 				var newTab = mutation.addedNodes[0];
 				chatTabObserver.observe(newTab, {attributes: true, attributeOldValue: true});
 			}
@@ -83,8 +83,24 @@ var OlarkObserver = (function(OO) {
 
 				var icon = identifyBase64Image(newElement.href);
 				if (icon !== false) {
-					sendXHR("newMenuIcon=" + icon);
-				}
+                    chats = false;
+                    switch (icon) {
+                        case 'avail_0chat':
+                            chats = 0;
+                        case 'avail_1chat':
+                            if (false === chats) chats = 1;
+                        case 'avail_2chat':
+                            if (false === chats) chats = 2; 
+                        case 'avail_3chat':
+                            if (false === chats) chats = 3;
+                            // @todo: what status names does Olark use?
+					        sendXHR('status/available?withChats=' + chats);
+				            break;
+                        case 'unavail':
+                            sendXHR('status/unavailable');
+                            break;
+                    }
+                }
 			}
 		});
 	});
