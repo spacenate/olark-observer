@@ -4,11 +4,20 @@ var OlarkObserver = (function(OO) {
 	// OlarkObserver already injected
 	if (object === typeof OO) return OO;
 
-	function sendXHR(newStatus) {
+	function sendXHR(newStatus, successCb, errorCb) {
 		var oReq = new XMLHttpRequest();
+		if (successCb instanceof Function) oReq.addEventListener("load", successCb);
+		if (errorCb instanceof Function) oReq.addEventListener("error", errorCb);
 		oReq.open("PUT", "https://lvh.me:4443/" + newStatus, true);
 		oReq.send();
 	}
+
+        /*	
+	sendXHR("status/meow",
+		function(e) {console.log("Success", e);},
+		function(e) {console.log("Error", e);}
+	);
+        */
 
 	/* Operator status changes */
 	var statusObserver = new MutationObserver(function(mutations) {
