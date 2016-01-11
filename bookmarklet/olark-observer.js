@@ -120,7 +120,7 @@ var OlarkObserver = (function(OO) {
         var oReq = new XMLHttpRequest();
         if (successCb instanceof Function) oReq.addEventListener("load", successCb);
         if (errorCb instanceof Function) oReq.addEventListener("error", errorCb);
-        oReq.open(method, "https://localhost:4443/" + newStatus, true);
+        oReq.open(method, "https://localhost.spacenate.com:4443/" + newStatus, true);
         oReq.send();
     }
 
