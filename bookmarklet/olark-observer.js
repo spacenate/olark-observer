@@ -115,9 +115,9 @@ var OlarkObserver = (function(OO) {
 		}
 	}
 
-    function sendXHR(newStatus) {
+    function sendXHR(newStatus, method="PUT") {
         var oReq = new XMLHttpRequest();
-        oReq.open("PUT", "https://localhost:4443/" + newStatus, true);
+        oReq.open(method, "https://localhost:4443/" + newStatus, true);
         oReq.send();
     }
 
