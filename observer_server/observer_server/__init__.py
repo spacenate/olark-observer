@@ -23,8 +23,8 @@ CUSTOM_RQ_STATUS_MAXCHATS = 0x03
 CUSTOM_RQ_STATUS_UNREAD = 0x04
 CUSTOM_RQ_CONFIRM = 0x22
 # OlarkObserver device details
-DEVICE_VENDOR_ID = 0x05DF
-DEVICE_PRODUCT_ID = 0x16C0
+DEVICE_VENDOR_ID = 0x16C0
+DEVICE_PRODUCT_ID = 0x05DC
 MANUFACTURER_STR = 'Spacenate.com'
 PRODUCT_STR = 'OlarkObserver'
 TRANSFER_LENGTH = 2
@@ -69,7 +69,10 @@ def updateStatus(status):
     withChats = request.args.get('withChats', '')
     # todo - figure out possible statuses
     # and messages to change to each status
-    newStatus = CUSTOM_RQ_STATUS_AVAIL
+    if withChats:
+        newStatus = CUSTOM_RQ_STATUS_UNREAD
+    else:
+        newStatus = CUSTOM_RQ_STATUS_AVAIL
     try:
         device = USBDevice()
         response = device.set_status(newStatus)
@@ -85,7 +88,10 @@ def updateChats(tabName, difference):
     # else: # Updating an existing chat session
     # 1 added a chat
     # 0 removed a chat
-    newStatus = CUSTOM_RQ_STATUS_UNREAD
+    if difference == 1:
+        newStatus = CUSTOM_RQ_STATUS_UNREAD
+    else:
+        newStatus = CUSTOM_RQ_STATUS_AVAIL
     try:
         device = USBDevice()
         response = device.set_status(newStatus)
