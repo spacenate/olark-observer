@@ -2,7 +2,10 @@ var OlarkObserver = (function(OO) {
 	'use strict';
 
 	// OlarkObserver already injected
-	if (OO instanceof Object) return OO;
+	if (OO instanceof Object) {
+            // debug behavior - unregister old listeners, so OO may be reloaded
+            OO.unregister();
+        }
 
 	/* Operator status changes */
 	var statusObserver = new MutationObserver(function(mutations) {
@@ -124,6 +127,14 @@ var OlarkObserver = (function(OO) {
         oReq.send();
     }
 
+    function unregister() {
+        console.log('Disconnecting observers');
+        var observers = [statusObserver, chatTabObserver, chatListObserver, linkObserver];
+        for (var i=0; i<observers.length; i++) {
+            observers[i].disconnect();
+        }
+    }
+
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
 
@@ -136,5 +147,8 @@ var OlarkObserver = (function(OO) {
         console.log('Olark Observer loaded, but not observing.')
     }
 
-	return {send: sendXHR};
+    return {
+        send: sendXHR,
+        unregister: unregister
+    };
 }(OlarkObserver));
