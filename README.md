@@ -38,4 +38,4 @@ The hardware design for the embedded system borrows heavily from the V-USB examp
 
 More to come on that when I find a USB cable to hack up.
 
-[bookmarklet]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/spacenate/olark-observer/master/bookmarklet.html
+[bookmarklet]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/spacenate/olark-observer/master/bookmarklet/bookmarklet.html
