@@ -2,7 +2,7 @@ var OlarkObserver = (function(OO) {
 	"use strict";
 
 	// OlarkObserver already injected
-	if (object === typeof OO) return OO;
+	if (OO instanceof Object) return OO;
 
 	function sendXHR(newStatus) {
 		var oReq = new XMLHttpRequest();
