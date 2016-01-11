@@ -7,6 +7,8 @@ var OlarkObserver = (function(OO) {
             OO.unregister();
         }
 
+        var debug = false;
+
 	/* Operator status changes */
 	var statusObserver = new MutationObserver(function(mutations) {
 		// Multiple mutations take place for each status change.
@@ -39,8 +41,7 @@ var OlarkObserver = (function(OO) {
 					return; // 'continue' with the next forEach, this is a closed chat tab
 				}
 
-				// @todo: maybe hash the tabName?
-				var tabName = displayNameElement.textContent.trim();
+				var tabName = hashString(displayNameElement.textContent.trim());
 
 				if (mutation.target.classList.contains('unread') && mutation.oldValue.indexOf('unread') === -1) {
 					// mutation.target just added the unread class
@@ -127,12 +128,27 @@ var OlarkObserver = (function(OO) {
         oReq.send();
     }
 
+    function hashString(string) {
+        var hash = 0, i, chr, len;
+        if (string.length === 0) return hash;
+        for (i = 0, len = string.length; i < len; i++) {
+            chr = string.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        return hash;
+    }
+
     function unregister() {
         console.log('Disconnecting observers');
         var observers = [statusObserver, chatTabObserver, chatListObserver, linkObserver];
         for (var i=0; i<observers.length; i++) {
             observers[i].disconnect();
         }
+    }
+
+    function setDebugMode() {
+        debug = true;
     }
 
     var statusPanelEl = document.querySelector('#op-status-panel'),
@@ -149,6 +165,7 @@ var OlarkObserver = (function(OO) {
 
     return {
         send: sendXHR,
-        unregister: unregister
+        unregister: unregister,
+        setDebugMode: setDebugMode
     };
 }(OlarkObserver));
