@@ -64,7 +64,7 @@ def checkDeviceStatus():
         return jsonify(result='NAK', message='invalid device response: '+str(response))
     return jsonify(result='ACK')
 
-@app.route('/status/<status>', methods=['PUT', 'GET'])
+@app.route('/status/<status>', methods=['PUT'])
 def updateStatus(status):
     withChats = request.args.get('withChats', '')
     # todo - figure out possible statuses
@@ -79,7 +79,7 @@ def updateStatus(status):
         return jsonify(result='NAK', message='invalid device response: '+str(response))
     return jsonify(result='ACK')
 
-@app.route('/chats/<tabName>/<int:difference>', methods=['PUT','GET'])
+@app.route('/chats/<tabName>/<int:difference>', methods=['PUT'])
 def updateChats(tabName, difference):
     # if tabName == 'new': # New chat session
     # else: # Updating an existing chat session
