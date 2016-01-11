@@ -4,12 +4,6 @@ var OlarkObserver = (function(OO) {
 	// OlarkObserver already injected
 	if (OO instanceof Object) return OO;
 
-	function sendXHR(newStatus) {
-		var oReq = new XMLHttpRequest();
-		oReq.open("PUT", "https://localhost:4443/" + newStatus, true);
-		oReq.send();
-	}
-
 	/* Operator status changes */
 	var statusObserver = new MutationObserver(function(mutations) {
 		// Multiple mutations take place for each status change.
@@ -121,6 +115,12 @@ var OlarkObserver = (function(OO) {
 		}
 	}
 
+    function sendXHR(newStatus) {
+        var oReq = new XMLHttpRequest();
+        oReq.open("PUT", "https://localhost:4443/" + newStatus, true);
+        oReq.send();
+    }
+
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
 
@@ -132,6 +132,6 @@ var OlarkObserver = (function(OO) {
     } else {
         console.log("Olark Observer loaded, but not observing.")
     }
-    
-	return {};
+
+	return {send: sendXHR};
 }(OlarkObserver));
