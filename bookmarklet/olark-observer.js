@@ -1,5 +1,5 @@
 var OlarkObserver = (function(OO) {
-	"use strict";
+	'use strict';
 
 	// OlarkObserver already injected
 	if (OO instanceof Object) return OO;
@@ -14,7 +14,7 @@ var OlarkObserver = (function(OO) {
 
 		// Grab the #status-indicator element, see what class has been assigned to it.
 		for (var i = 0; i < newNodes.length; i++) {
-			if (newNodes[i].id === "status-indicator") {
+			if (newNodes[i].id === 'status-indicator') {
 				newStatus = newNodes[i].className;
 			}
 		}
@@ -29,20 +29,20 @@ var OlarkObserver = (function(OO) {
 		mutations.forEach(function(mutation) {
 			// mutation.target is a LIVE element, and mutation callbacks are ASYNC
 			// so, ensure the tab has not been closed (mutation.target is not null)
-			if (mutation.type === "attributes" && mutation.target !== null) {
-				var displayNameElement = mutation.target.querySelector(".display-name");
+			if (mutation.type === 'attributes' && mutation.target !== null) {
+				var displayNameElement = mutation.target.querySelector('.display-name');
 
 				if (displayNameElement === null) {
-					return; // "continue" with the next forEach, this is a closed chat tab
+					return; // 'continue' with the next forEach, this is a closed chat tab
 				}
 
 				// @todo: maybe hash the tabName?
 				var tabName = displayNameElement.textContent.trim();
 
-				if (mutation.target.classList.contains("unread") && mutation.oldValue.indexOf("unread") === -1) {
+				if (mutation.target.classList.contains('unread') && mutation.oldValue.indexOf('unread') === -1) {
 					// mutation.target just added the unread class
 					sendXHR('chats/' + tabName + '/1');
-				} else if (mutation.target.classList.contains("unread") === false && mutation.oldValue.indexOf("unread") !== -1) {
+				} else if (mutation.target.classList.contains('unread') === false && mutation.oldValue.indexOf('unread') !== -1) {
 					// mutation.target just removed the unread class
 					sendXHR('chats/' + tabName + '/0');
 				}
@@ -52,8 +52,8 @@ var OlarkObserver = (function(OO) {
 	var chatListObserver = new MutationObserver(function(mutations) {
 		// iterate over mutations to look for new chats (new child added to #active-chats)
 		mutations.forEach(function(mutation) {
-			if (mutation.type === "childList" && mutation.target.id === "active-chats" && mutation.addedNodes.length > 0) {
-				sendXHR("chats/new/1")
+			if (mutation.type === 'childList' && mutation.target.id === 'active-chats' && mutation.addedNodes.length > 0) {
+				sendXHR('chats/new/1')
 				var newTab = mutation.addedNodes[0];
 				chatTabObserver.observe(newTab, {attributes: true, attributeOldValue: true});
 			}
@@ -63,11 +63,11 @@ var OlarkObserver = (function(OO) {
 	/* New unread chats, while window is inactive */
 	var linkObserver = new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
-			if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+			if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
 				// It seems only one element is added for each mutation
 				var newElement = mutation.addedNodes[0];
-				// "continue" with next forEach if the new element is not a link[rel=icon]
-				if (newElement.rel !== "icon") {
+				// 'continue' with next forEach if the new element is not a link[rel=icon]
+				if (newElement.rel !== 'icon') {
 					return;
 				}
 
@@ -118,7 +118,7 @@ var OlarkObserver = (function(OO) {
     function sendXHR(newStatus, method) {
         method = method || 'PUT';
         var oReq = new XMLHttpRequest();
-        oReq.open(method, "https://localhost:4443/" + newStatus, true);
+        oReq.open(method, 'https://localhost:4443/' + newStatus, true);
         oReq.send();
     }
 
@@ -129,9 +129,9 @@ var OlarkObserver = (function(OO) {
         statusObserver.observe(statusPanelEl, {childList: true});
         chatListObserver.observe(activeChatsEl, { childList: true});
         linkObserver.observe(document.querySelector('head'), {childList: true});
-        console.log("Observing!");
+        console.log('Observing!');
     } else {
-        console.log("Olark Observer loaded, but not observing.")
+        console.log('Olark Observer loaded, but not observing.')
     }
 
 	return {send: sendXHR};
