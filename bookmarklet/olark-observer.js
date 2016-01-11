@@ -20,7 +20,7 @@ var OlarkObserver = (function(OO) {
 		}
 
 		if (newStatus) {
-			sendXHR('POST', 'status/' + newStatus);
+			sendXHR('PUT', 'status/' + newStatus);
 		}
 	})
 
@@ -41,10 +41,10 @@ var OlarkObserver = (function(OO) {
 
 				if (mutation.target.classList.contains('unread') && mutation.oldValue.indexOf('unread') === -1) {
 					// mutation.target just added the unread class
-					sendXHR('POST', 'chats/' + tabName + '/1');
+					sendXHR('PUT', 'chats/' + tabName + '/1');
 				} else if (mutation.target.classList.contains('unread') === false && mutation.oldValue.indexOf('unread') !== -1) {
 					// mutation.target just removed the unread class
-					sendXHR('POST', 'chats/' + tabName + '/0');
+					sendXHR('PUT', 'chats/' + tabName + '/0');
 				}
 			}
 		});
@@ -53,7 +53,7 @@ var OlarkObserver = (function(OO) {
 		// iterate over mutations to look for new chats (new child added to #active-chats)
 		mutations.forEach(function(mutation) {
 			if (mutation.type === 'childList' && mutation.target.id === 'active-chats' && mutation.addedNodes.length > 0) {
-				sendXHR('POST', 'chats/new/1')
+				sendXHR('PUT', 'chats/new/1')
 				var newTab = mutation.addedNodes[0];
 				chatTabObserver.observe(newTab, {attributes: true, attributeOldValue: true});
 			}
@@ -84,10 +84,10 @@ var OlarkObserver = (function(OO) {
                         case 'avail_3chat':
                             if (false === chats) chats = 3;
                             // @todo: what status names does Olark use?
-					        sendXHR('POST', 'status/available?withChats=' + chats);
+					        sendXHR('PUT', 'status/available?withChats=' + chats);
 				            break;
                         case 'unavail':
-                            sendXHR('POST', 'status/unavailable');
+                            sendXHR('PUT', 'status/unavailable');
                             break;
                     }
                 }
