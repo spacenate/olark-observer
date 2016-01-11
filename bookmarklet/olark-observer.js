@@ -29,7 +29,6 @@ var OlarkObserver = (function(OO) {
 			sendXHR('status/' + newStatus);
 		}
 	})
-	statusObserver.observe(document.querySelector('#op-status-panel'), {childList: true});
 
 	/* New unread chats */
 	var chatTabObserver = new MutationObserver(function(mutations) {
@@ -66,7 +65,6 @@ var OlarkObserver = (function(OO) {
 			}
 		});
 	});
-	chatListObserver.observe(document.querySelector('#active-chats'), { childList: true});
 
 	/* New unread chats, while window is inactive */
 	var linkObserver = new MutationObserver(function(mutations) {
@@ -102,7 +100,6 @@ var OlarkObserver = (function(OO) {
 			}
 		});
 	});
-	linkObserver.observe(document.querySelector('head'), {childList: true});
 	// @todo: slim down this list to one base64 image per status
 	function identifyBase64Image(base64String) {
 		switch (base64String) {
@@ -124,6 +121,17 @@ var OlarkObserver = (function(OO) {
 		}
 	}
 
-    console.log("Observing!");
+    var statusPanelEl = document.querySelector('#op-status-panel'),
+        activeChatsEl = document.querySelector('#active-chats');
+
+    if (statusPanelEl instanceof Object && activeChatsEl instanceof Object) {
+        statusObserver.observe(statusPanelEl, {childList: true});
+        chatListObserver.observe(activeChatsEl, { childList: true});
+        linkObserver.observe(document.querySelector('head'), {childList: true});
+        console.log("Observing!");
+    } else {
+        console.log("Olark Observer loaded, but not observing.")
+    }
+    
 	return {};
 }(OlarkObserver));
