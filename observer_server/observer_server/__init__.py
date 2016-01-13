@@ -67,12 +67,19 @@ def checkDeviceStatus():
 @app.route('/status/<status>', methods=['PUT'])
 def updateStatus(status):
     withChats = request.args.get('withChats', '')
-    # todo - figure out possible statuses
-    # and messages to change to each status
+    statuses = {
+        "available": CUSTOM_RQ_STATUS_AVAIL,
+        "away": CUSTOM_RQ_STATUS_UNAVAIL,
+        "at-chat-limit": CUSTOM_RQ_STATUS_MAXCHATS,
+        "at-busy-limit": CUSTOM_RQ_STATUS_MAXCHATS, # @todo: test behavior
+        "disconnected": CUSTOM_RQ_STATUS_OFF,       # with
+        "reconnecting": CUSTOM_RQ_STATUS_OFF,       # these
+        "logout": CUSTOM_RQ_STATUS_OFF              # status
+    }
     if withChats:
         newStatus = CUSTOM_RQ_STATUS_UNREAD
     else:
-        newStatus = CUSTOM_RQ_STATUS_AVAIL
+        newStatus = statuses.get(status, CUSTOM_RQ_STATUS_OFF) # What should default be?
     try:
         device = USBDevice()
         response = device.set_status(newStatus)
