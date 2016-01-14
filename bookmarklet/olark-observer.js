@@ -137,7 +137,7 @@ var OlarkObserver = (function(OO, document) {
     }
 
     function unregister() {
-        console.log('Disconnecting observers');
+        debugLog('Disconnecting observers');
         for (var i=0; i<observers.length; i++) {
             observers[i].disconnect();
         }
@@ -149,7 +149,7 @@ var OlarkObserver = (function(OO, document) {
         }
         debug = (bool) ? true : false;
         var prefix = (debug) ? "en" : "dis";
-        debugLog("Debug mode " + prefix + "abled");
+        console.log("Debug mode " + prefix + "abled");
     }
 
     function debugLog() {
