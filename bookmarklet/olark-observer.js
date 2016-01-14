@@ -1,4 +1,4 @@
-var OlarkObserver = (function(OO) {
+var OlarkObserver = (function(OO, document) {
     'use strict';
 
     if (OO instanceof Object) {
@@ -9,6 +9,7 @@ var OlarkObserver = (function(OO) {
     }
 
     var debug = false,
+        feedbackEl = createFeedbackElement(),
         statusObserver,
         chatTabObserver,
         chatListObserver,
@@ -83,7 +84,7 @@ var OlarkObserver = (function(OO) {
                 var newStatus = identifyBase64Image(newElement.href);
                 if (newStatus !== false) {
                     sendXHR('PUT', 'status/'+newStatus);
-                } else if (debug === true) {
+                } else {
                     debugLog("Unidentified status icon", newElement.href);
                 }
             }
@@ -107,7 +108,7 @@ var OlarkObserver = (function(OO) {
                 return 'away';
             case 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADHUlEQVRYhe2V7UtTYRjGb4iIIkhqmlszZ2yRmnS2OTdrbtN0i7bKXlhU9EJK0fqiEWlk4Me+Jf0DRVAatKJVhlbYB0mMaBFUEBtHWrCUyGnqppvP1Ye2XuZkR3cKAi+4eXjOgef6neu+Hw7Rgha0oP9VN9fLJLc0ObZbmhybWy01XSFa8k+Mu6qVjR7j2s9unXS6u0YZe2xVxjrNBRN3tLKIR7/m4Q0uW/VXjG/qC1Y/Mik+PjIrMHDChMiFHYi27ET04i5MtuzA17Pb4HWqmbtMFnZrco+Jan6XU2R1bskfeVlbgqlz28Ga7WDn7UCzHWj6sbJmO2JN2xE8acY9g3xCVIhuS8GHF/YixBpqgDPWn8XO2IDG35411mC60YbB+gq4dbKwKO14bt3g8OjlmDppBlwWwFUJnK4Cc1UBpy1grkrgVCVwygK4qgBXJaaOG/GuXME6udVdGQM8MRW8eWsvAqurAKuvAOLF6o1AXXxfZ8SoaT2C+SvhJ0quYT/RVZ7IMi+ArvK88aF9HNjRcrAjBiBRh39UxFGCwMplqYxnlI+ohyfKmhOAp1TKwk4t2AEdcFAHHCgDDpaBHSrDxNYN4BcvmmEUamtDQt/a25Pf8zwRJxxAK2XhvWrAqQVzlgL7SwGnFpPWopTmn/R6xIaGfgF0dKRKwys4iccG+cQXezGwWw3s4eKrGoEVS38eyEskiPT1IRYMAozhd80CAB/RNUEAPQb5+4EqFeDYCObYCDhKMLpJ/sdhvEQCNjaGVJoNwE8EnkiRFqBbK7vUp89jqC4E21oIVBcimL18BsCk14tYIIAoz4ONjwsC8BO1pgW4QrTEo80dGdy8DsykAjOq0k57uLdXEICP6JmgNtzmcmofaKXhQZ0CUS4vLUCkv19oAsOCABIQ9zW5I6+Uq5iIABAMkGjH0+LsyyIChOYEkJCfKCQGgOAZSJaP6JpICTTMC4AnsogAEJrzfyEphWcZArTO2zyeQpafaCAtwPXr4vU+BQTnJ3qd7lYkm2cUfQqIrHRDmeh5xrGnAVH4iVrjs5G4pqH4vmG2r/4Oe0DU2cmYxtwAAAAASUVORK5CYII=':
                 return 'away?withChats=1';
-            /* two unread chats? */
+            /* need base64 image for away?withChats=2 */
             case 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD6ElEQVRYhe2VbUibVxTHL4xRNgaVLlqTxTUZWmpaWWKML1tMoo1xJOnWrWukLXthykqTL1rGqqwD6af5aVj6IV/KSmFCYZldtlm0DZV+yEBWO9ZughhiU9LUl5lEl/cn978PJk+evKjxZYOBfzg8PIfLOb97zrn3ErKrXe3q/6qhgwLejdqy9hu1Ze02GV91mZA9/0niUW1lj1356jObgp8ca6tkbusqmRG1OPy9XBC1N7zy87fS0qp/JfFQg3j/LZXIc0stwuynKkS/OIbExbeR+PIdxC4ew9Jnb+GBSUZt9YKIrbb84x1NPiwVlYy8eSD46/EaxD/Xg/YaQPsMQK8BuLD6pb0GMBf08J1V44dGYXhHIcY04ukJgwRMdxtwXscaPd8O9HB8PW1I9rRjrqsZNoUgsiPtcOoOGe0NQsTPqgGzBjC3AJZWUHMrYNGAmluAcy3AOQ1gbgXMLYh/osSfTSI6It0/um2AOyrx738YJKCdzaBdzUDKaJcS6Ez9dyqxrDoI34F9cBGSa34XId+4CdFsCWC0qSI0/74U9KMm0A8bgbR9sGpRYw2e7HsxK+lTnQ4+vR5uHi/LP0PIXTchJZsCsNfxacQkBz2lAE4rgFP1wOl60DP1CB89BPfzz7EJwg4HEI+Dq/jUFJ5qtVwQt5sQafEAcj6NnJABJjmoqQ7oqANMcsR0kqzk0YkJrKl4HF61mgvxoOhK3G4UhhcNh4F3ZcB70tRXhid7X2ADLpjNAKVsPmZ+HozXm8UQdjhy23GtKIC7jcKp2dYqwHgE1HgEMNZg+XVhVrCg1ZpJ7vWy/tjDh5kiTE/nDaibENGGAGNywVe/NFRQaKtBj1YD2mr4Sl/KCuQfGAANhUBXVrAyNJQBuH+fBYg9elTohPRvCHCZkD12eXlw7o3XQFVVoMqqQoEyu+LxsHz16upMcNqycv163toZQsaLasN30rLjP8n5kTmFCAlpxboAzzo6gGQyewgZJu9Ipu+IogDSED/WlgcnK1+m6wKcPAkwTN5BiNy7V3B90QDpdjgOl369HoCLEPj0eiz19yO5uMgC0HAYHokkd21gUwBpuQgJcAP9PTyMhMeDhMeDpUuXWP9ffX2ZOaAUCxbL1mYgVzOEXOMGik1OsjuNOp2sPzA4uN5lBBch3VsCcBOiya0AV1GnE6GbN7NmIen347FYnFX+Tb8LOVUYZ3tuNAKJRN7gcRW8cmXzd8AGVShxETLLXscWC2golJ85kUDQat2Z3heAkLoI+Y0bfMFiQWBwEEGrFf6BgUJP8vi2Sl8AoiR3KNewwLbLvgGIyEVIf2o20sc0kPrvXmvX/wBYvzAbZYnsEQAAAABJRU5ErkJggg==':
                 return 'away?withChats=3';
             default:
@@ -157,7 +158,44 @@ var OlarkObserver = (function(OO) {
         }
     }
 
-    /* Start observers observing */
+    function createFeedbackElement() {
+        if ((inner = document.getElementById('olark-observer')) instanceof Object) {
+            return inner;
+        }
+        /* olark-observer-container */
+        var container = document.createElement('div');
+        container.id = "olark-observer-container";
+        container.style.position = "absolute";
+        container.style.bottom = "1em";
+        container.style.right = "1em";
+        /* olark-observer */
+        var inner = document.createElement('div');
+        inner.id = "olark-observer";
+        inner.style.padding = "0.2em 0.5em";
+        inner.style.backgroundColor = "#fff";
+        inner.style.borderRadius = "0.4em";
+        inner.style.translate = "transform 1s";
+        inner.style.transform = "translateY(3em)";
+
+        container.appendChild(inner);
+        document.body.appendChild(container);
+        return inner;
+    }
+
+    function showFeedback(message) {
+        if (!feedbackEl.firstChild) {
+            var messageEl = document.createElement('p');
+            messageEl.style.margin = "0.2em";
+            feedbackEl.appendChild(messageEl);
+        }
+        feedbackEl.firstChild.textContent = message;
+        feedbackEl.style.transform = "translateY(0em)";
+        document.setTimeout(function(){
+            feedbackEl.style.transform = "translateY(3em)";
+        }, 4000);
+    }
+
+	/* Start observers observing */
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
 
@@ -165,9 +203,9 @@ var OlarkObserver = (function(OO) {
         statusObserver.observe(statusPanelEl, {childList: true});
         chatListObserver.observe(activeChatsEl, { childList: true});
         linkObserver.observe(document.querySelector('head'), {childList: true});
-        console.log('Olark Observer loaded and observing!');
+        showFeedback('Olark Observer loaded!');
     } else {
-        console.log('Olark Observer loaded, but not observing.')
+        showFeedback('Olark Observer loaded~')
     }
 
     return {
@@ -175,4 +213,4 @@ var OlarkObserver = (function(OO) {
         unregister: unregister,
         setDebugMode: setDebugMode
     };
-}(OlarkObserver));
+}(OlarkObserver, document));
