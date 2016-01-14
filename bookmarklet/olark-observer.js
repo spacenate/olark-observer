@@ -195,6 +195,18 @@ var OlarkObserver = (function(OO, document) {
         }, 4000);
     }
 
+    /* Find width of element, then animate on to page
+    var offScreen = document.createElement('div');
+    offScreen.style.position = "absolute";
+    offScreen.style.top = "-100em";
+    document.body.appendChild(offScreen);
+
+    var p = document.createElement('p');
+    p.textContent = "Some string";
+    offScreen.appendChild(p);
+    p.scrollWidth;
+    */
+
 	/* Start observers observing */
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
