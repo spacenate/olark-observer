@@ -6,8 +6,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver,
         chatTabObserver,
         chatListObserver,
-        linkObserver,
-        observers = [statusObserver,chatTabObserver,chatListObserver,linkObserver];
+        linkObserver;
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
@@ -138,6 +137,7 @@ var OlarkObserver = (function(OO, document, window) {
 
     function unregister() {
         debugLog('Disconnecting observers');
+        var observers = [statusObserver,chatTabObserver,chatListObserver,linkObserver];
         for (var i=0; i<observers.length; i++) {
             debugLog('Disconnecting', observers[i]);
             observers[i].disconnect();
