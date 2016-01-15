@@ -174,7 +174,7 @@ var OlarkObserver = (function(OO, document, window) {
         inner.style.padding = "0.2em 0.5em";
         inner.style.backgroundColor = "#fff";
         inner.style.borderRadius = "0.4em";
-        inner.style.translate = "transform 1s";
+        inner.style.transition = "transform 1s";
         inner.style.transform = "translateY(3em)";
 
         container.appendChild(inner);
