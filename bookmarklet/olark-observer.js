@@ -200,14 +200,15 @@ var OlarkObserver = (function(OO, document, window) {
         statusIndicator.style.left = '4px';
         statusIndicator.style.height = '9px';
         statusIndicator.style.width = '9px';
+        statusIndicator.style.marginLeft = '5px';
         statusIndicator.style.borderRadius = '10px';
         statusIndicator.style.backgroundColor = redColor;
         /* status-text */
         statusText = document.createElement('span');
         statusText.id = 'olark-observer-status-text';
         statusText.style.float = 'right';
-        statusText.style.marginRight = '5px';
         statusText.style.height = '16px';
+        statusText.style.transition = 'opacity .5s';
 
         feedbackEl.appendChild(statusIndicator);
         feedbackEl.appendChild(statusText);
@@ -233,14 +234,16 @@ var OlarkObserver = (function(OO, document, window) {
 
     function showFeedback(message) {
         debugLog(message);
-        statusText.textContent = '';
-
-        offScreen.textContent = message;
-        feedbackEl.style.width = (offScreen.scrollWidth+15) + 'px';
-
+        statusText.style.opacity = '0';
         window.setTimeout(function(){
-            statusText.textContent = message;
-        }, 1000);
+            offScreen.textContent = message;
+            feedbackEl.style.width = (offScreen.scrollWidth + 15) + 'px';
+            window.setTimeout(function(){
+                statusText.textContent = message;
+                statusText.opacity = '1';
+            }, 1000);
+        }, 500);
+
     }
 
     /* Start observers observing */
