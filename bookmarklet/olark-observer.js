@@ -92,7 +92,7 @@ var OlarkObserver = (function(OO, document, window) {
 	
 	function getCurrentStatusIcon() {
 		var links = document.head.getElementsByTagName('link');
-		return hashString(links[links.length-1]);
+		return hashString(links[links.length-1].href);
 	}
 	
     /* @todo: slim down this list to one image per status */
