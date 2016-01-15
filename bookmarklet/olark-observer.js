@@ -178,7 +178,6 @@ var OlarkObserver = (function(OO, document, window) {
         container.style.right = '20px';
         container.style.bottom = '0px';
         container.style.paddingBottom = '18px';
-
         /* olark-observer */
         feedbackEl = document.createElement('div');
         feedbackEl.id = 'olark-observer';
@@ -189,7 +188,7 @@ var OlarkObserver = (function(OO, document, window) {
         feedbackEl.style.backgroundColor = 'rgba(255,255,255,0.1)';
         feedbackEl.style.color = '#fff';
         feedbackEl.style.fontSize = '14px';
-        feedbackEl.style.transition = 'transform 1s, width 1s';
+        feedbackEl.style.transition = 'transform 1s, width .6s';
         feedbackEl.style.transform = 'translateY(4em)';
         /* status-indicator */
         statusIndicator = document.createElement('span');
@@ -220,8 +219,8 @@ var OlarkObserver = (function(OO, document, window) {
         offScreenContainer.style.position = 'absolute';
         offScreenContainer.style.top = '-100em';
         offScreen = document.createElement('p');
-        offScreen.id = "olark-observer-offscreen";
-        offScreen.style.fontSize = "14px";
+        offScreen.id = 'olark-observer-offscreen';
+        offScreen.style.fontSize = '14px';
 
         offScreenContainer.appendChild(offScreen);
         document.body.appendChild(offScreenContainer);
@@ -242,13 +241,13 @@ var OlarkObserver = (function(OO, document, window) {
             window.setTimeout(function(){
                 statusText.textContent = message;
                 statusText.style.opacity = '1';
-            }, 1000);
+            }, 600);
         }, 400);
     }
 
-    /* Start observers observing */
     createFeedbackElement();
 
+    /* Start observers observing */
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
 
@@ -260,6 +259,8 @@ var OlarkObserver = (function(OO, document, window) {
     } else {
         debugLog('Not observing.');
     }
+
+    /* @todo: Connect to server */
 
     return {
         send: sendXHR,
