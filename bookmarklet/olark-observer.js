@@ -192,7 +192,7 @@ var OlarkObserver = (function(OO, document, window) {
         var text = document.createElement('span');
         text.id = "olark-observer-status-text";
         text.style.float = "right";
-        text.style.margin-right = "5px";
+        text.style.marginRight = "5px";
         text.textContent = "Connecting to server...";
 
         inner.appendChild(indicator);
