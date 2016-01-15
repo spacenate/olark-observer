@@ -34,7 +34,6 @@ Now you are ready to load the bookmarklet while using the Olark chat console, an
 
 ## USB hardware
 
-The hardware is made up of an AVR microcontroller (I've chosen the ATtiny85) running the V-USB library for USB communications. You can find the firmware and more details about the hardware in the [olark-observer-hardware](olark-observer-hardware) project.
+The hardware is made up of an AVR microcontroller (I've chosen the ATtiny85) running the V-USB library for USB communications. You can find the firmware and more details about the hardware in the [olark-observer-hardware](https://github.com/spacenate/olark-observer-hardware) project.
 
 [bookmarklet]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/spacenate/olark-observer/master/bookmarklet/bookmarklet.html
-[olark-observer-hardware]: https://github.com/spacenate/olark-observer-hardware
