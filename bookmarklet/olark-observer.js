@@ -9,9 +9,9 @@ var OlarkObserver = (function(OO, document, window) {
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
-        // Debug behavior - unregister old listeners,
+        // Debug behavior - disconnect old listeners,
         // and proceed to load new OlarkObserver object
-        debug = OO.unregister();
+        debug = OO.disconnect();
     }
 
     /* Operator status changes */
@@ -114,27 +114,7 @@ var OlarkObserver = (function(OO, document, window) {
         }
     }
 
-    function sendXHR(method, newStatus, successCb, errorCb) {
-        debugLog(method, newStatus);
-        var oReq = new XMLHttpRequest();
-        if (successCb instanceof Function) oReq.addEventListener('load', successCb);
-        if (errorCb instanceof Function) oReq.addEventListener('error', errorCb);
-        oReq.open(method, 'https://localhost.spacenate.com:4443/' + newStatus, true);
-        oReq.send();
-    }
-
-    function hashString(string) {
-        var hash = 0, i, chr, len;
-        if (string.length === 0) return hash;
-        for (i = 0, len = string.length; i < len; i++) {
-            chr = string.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0;
-        }
-        return hash;
-    }
-
-    function unregister() {
+    function disconnect() {
         debugLog('Disconnecting observers');
         var observers = [statusObserver,chatTabObserver,chatListObserver,linkObserver];
         for (var i=0; i<observers.length; i++) {
@@ -154,6 +134,26 @@ var OlarkObserver = (function(OO, document, window) {
         if (debug) {
             console.log.apply(console, arguments);
         }
+    }
+
+    function hashString(string) {
+        var hash = 0, i, chr, len;
+        if (string.length === 0) return hash;
+        for (i = 0, len = string.length; i < len; i++) {
+            chr = string.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        return hash;
+    }
+
+    function sendXHR(method, newStatus, successCb, errorCb) {
+        debugLog(method, newStatus);
+        var oReq = new XMLHttpRequest();
+        if (successCb instanceof Function) oReq.addEventListener('load', successCb);
+        if (errorCb instanceof Function) oReq.addEventListener('error', errorCb);
+        oReq.open(method, 'https://localhost.spacenate.com:4443/' + newStatus, true);
+        oReq.send();
     }
 
     var feedbackEl,
@@ -245,7 +245,29 @@ var OlarkObserver = (function(OO, document, window) {
         }, 400);
     }
 
-    createFeedbackElement();
+    function connectToServer() {
+        sendXHR('GET', '/',
+            function(){
+                showFeedback('Connecting to device...');
+                connectToDevice();
+            },
+            function(){
+                debugLog('Error connecting to server');
+                window.setTimeout(connectToServer, 500);
+            });
+    }
+
+    function connectToDevice() {
+        sendXHR('GET', '/device',
+            function(e){
+                debugLog(e);
+                showFeedback('Connected');
+            },
+            function(){
+                debugLog('Error connecting to server');
+                window.setTimeout(connectToServer, 500);
+            });
+    }
 
     /* Start observers observing */
     var statusPanelEl = document.querySelector('#op-status-panel'),
@@ -260,11 +282,12 @@ var OlarkObserver = (function(OO, document, window) {
         debugLog('Not observing.');
     }
 
-    /* @todo: Connect to server */
+    createFeedbackElement();
+    connectToServer();
 
     return {
         send: sendXHR,
-        unregister: unregister,
+        disconnect: disconnect,
         setDebugMode: setDebugMode,
         showFeedback: showFeedback
     };
