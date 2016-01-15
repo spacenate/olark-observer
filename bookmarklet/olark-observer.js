@@ -189,7 +189,9 @@ var OlarkObserver = (function(OO, document, window) {
             feedbackEl.appendChild(messageEl);
         }
         feedbackEl.firstChild.textContent = message;
-        feedbackEl.style.transform = "translateY(0em)";
+        window.setTimeout(function(){
+            feedbackEl.style.transform = "translateY(0em)";
+        }, 0);
         window.setTimeout(function(){
             feedbackEl.style.transform = "translateY(3em)";
         }, 4000);
