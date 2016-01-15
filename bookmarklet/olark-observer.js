@@ -165,17 +165,38 @@ var OlarkObserver = (function(OO, document, window) {
         var container = document.createElement('div');
         container.id = "olark-observer-container";
         container.style.position = "absolute";
-        container.style.bottom = "1em";
-        container.style.right = "1em";
+        container.style.bottom = "18px";
+        container.style.right = "20px";
         /* olark-observer */
         var inner = document.createElement('div');
         inner.id = "olark-observer";
-        inner.style.padding = "0.2em 0.5em";
-        inner.style.backgroundColor = "#fff";
-        inner.style.borderRadius = "0.4em";
+        inner.style.padding = "7px 0 7px 14px";
+        inner.style.backgroundColor = "rgba(255,255,255,0.1)";
+        inner.style.borderRadius = "19px";
+        inner.style.color = "#fff";
+        inner.style.fontSize = 14px;
         inner.style.transition = "transform 1s";
         inner.style.transform = "translateY(3em)";
-
+        /* status-indicator */
+        var indicator = document.createElement('span');
+        indicator.id = "olark-observer-status-indicator";
+        indicator.style.height = "9px";
+        indicator.style.width = "9px";
+        indicator.style.borderRadius = "10px";
+        indicator.style.float = "right";
+        indicator.style.position = "relative";
+        indicator.style.top = "3px";
+        indicator.style.left = "4px";
+        indicator.style.backgroundColor = "#aaa";
+        /* status-text */
+        var text = document.createElement('span');
+        text.id = "olark-observer-status-text";
+        text.style.float = "right";
+        text.style.margin-right = "5px";
+        text.textContent = "Connecting to server...";
+        
+        inner.appendChild(indicator);
+        inner.appendChild(text);
         container.appendChild(inner);
         document.body.appendChild(container);
         return inner;
@@ -184,7 +205,7 @@ var OlarkObserver = (function(OO, document, window) {
     function showFeedback(message) {
         debugLog(message);
         if (!feedbackEl.firstChild) {
-            var messageEl = document.createElement('p');
+            var messageEl = document.createElement('span');
             messageEl.style.margin = "0.2em";
             feedbackEl.appendChild(messageEl);
         }
