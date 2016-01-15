@@ -207,6 +207,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusText.id = 'olark-observer-status-text';
         statusText.style.float = 'right';
         statusText.style.marginRight = '5px';
+        statusText.style.height = '16px';
 
         feedbackEl.appendChild(statusIndicator);
         feedbackEl.appendChild(statusText);
@@ -232,10 +233,10 @@ var OlarkObserver = (function(OO, document, window) {
 
     function showFeedback(message) {
         debugLog(message);
-        statusText.textContent = "";
+        statusText.textContent = '';
 
         offScreen.textContent = message;
-        feedbackEl.style.width = (offScreen.scrollWidth+15) + "px";
+        feedbackEl.style.width = (offScreen.scrollWidth+15) + 'px';
 
         window.setTimeout(function(){
             statusText.textContent = message;
