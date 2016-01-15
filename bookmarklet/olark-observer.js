@@ -264,7 +264,7 @@ var OlarkObserver = (function(OO, document, window) {
     function connectToDevice() {
         sendXHR('GET', 'device',
             function(e){
-                response = JSON.parse(e.currentTarget.responseText)
+                response = JSON.parse(e.currentTarget.responseText);
                 debugLog(response);
                 showFeedback('Connected');
             },
