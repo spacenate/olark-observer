@@ -175,9 +175,10 @@ var OlarkObserver = (function(OO, document, window) {
         /* olark-observer */
         var inner = document.createElement('div');
         inner.id = "olark-observer";
-        inner.style.padding = "7px 14px 7px 0";
-        inner.style.backgroundColor = "rgba(255,255,255,0.1)";
+        inner.style.display = "inline-block";
+        inner.style.padding = "7px 14px";
         inner.style.borderRadius = "19px";
+        inner.style.backgroundColor = "rgba(255,255,255,0.1)";
         inner.style.color = "#fff";
         inner.style.fontSize = "14px";
         inner.style.transition = "transform 1s";
@@ -185,15 +186,14 @@ var OlarkObserver = (function(OO, document, window) {
         /* status-indicator */
         var indicator = document.createElement('span');
         indicator.id = "olark-observer-status-indicator";
-        indicator.style.height = "9px";
-        indicator.style.width = "9px";
-        indicator.style.borderRadius = "10px";
         indicator.style.float = "right";
         indicator.style.position = "relative";
         indicator.style.top = "3px";
         indicator.style.left = "4px";
+        indicator.style.height = "9px";
+        indicator.style.width = "9px";
+        indicator.style.borderRadius = "10px";
         indicator.style.backgroundColor = redColor;
-        console.log(redColor);
         /* status-text */
         var text = document.createElement('span');
         text.id = "olark-observer-status-text";
