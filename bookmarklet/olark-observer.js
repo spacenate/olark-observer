@@ -2,7 +2,8 @@ var OlarkObserver = (function(OO, document, window) {
     'use strict';
 
     var debug = false,
-        feedbackEl = createFeedbackElement(),
+        statusIndicator,
+        statusText,
         statusObserver,
         chatTabObserver,
         chatListObserver,
@@ -192,13 +193,14 @@ var OlarkObserver = (function(OO, document, window) {
         indicator.style.top = "3px";
         indicator.style.left = "4px";
         indicator.style.backgroundColor = redColor;
+        console.log(redColor);
         /* status-text */
         var text = document.createElement('span');
         text.id = "olark-observer-status-text";
         text.style.float = "right";
         text.style.marginRight = "5px";
-        text.textContent = "Connecting to server...";
 
+        text.appendChild(document.createTextNode('Connecting to server...'));
         inner.appendChild(indicator);
         inner.appendChild(text);
         container.appendChild(inner);
@@ -237,6 +239,8 @@ var OlarkObserver = (function(OO, document, window) {
     */
 
 	/* Start observers observing */
+    createFeedbackElement();
+
     var statusPanelEl = document.querySelector('#op-status-panel'),
         activeChatsEl = document.querySelector('#active-chats');
 
