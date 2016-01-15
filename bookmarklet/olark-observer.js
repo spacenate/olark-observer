@@ -204,6 +204,7 @@ var OlarkObserver = (function(OO, document, window) {
 
     function showFeedback(message) {
         debugLog(message);
+        /*
         if (!feedbackEl.firstChild) {
             var messageEl = document.createElement('span');
             messageEl.style.margin = "0.2em";
@@ -216,6 +217,7 @@ var OlarkObserver = (function(OO, document, window) {
         window.setTimeout(function(){
             feedbackEl.style.transform = "translateY(3em)";
         }, 4000);
+        */
     }
 
     /* Find width of element, then animate on to page
