@@ -245,15 +245,19 @@ var OlarkObserver = (function(OO, document, window) {
         }, 400);
     }
 
+    var retryWaitTime = 500;
+
     function connectToServer() {
         sendXHR('GET', '/',
             function(){
                 showFeedback('Connecting to device...');
                 connectToDevice();
+                retryWaitTime = 500;
             },
             function(){
                 debugLog('Error connecting to server');
-                window.setTimeout(connectToServer, 500);
+                window.setTimeout(connectToServer, retryWaitTime);
+                retryWaitTime *= 1.5;
             });
     }
 
@@ -265,7 +269,7 @@ var OlarkObserver = (function(OO, document, window) {
             },
             function(){
                 debugLog('Error connecting to server');
-                window.setTimeout(connectToServer, 500);
+                window.setTimeout(connectToServer, retryWaitTime);
             });
     }
 
