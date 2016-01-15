@@ -189,7 +189,7 @@ var OlarkObserver = (function(OO, document, window) {
         feedbackEl.style.backgroundColor = 'rgba(255,255,255,0.1)';
         feedbackEl.style.color = '#fff';
         feedbackEl.style.fontSize = '14px';
-        feedbackEl.style.transition = 'transform 1s width 1s';
+        feedbackEl.style.transition = 'transform 1s, width 1s';
         feedbackEl.style.transform = 'translateY(4em)';
         /* status-indicator */
         statusIndicator = document.createElement('span');
@@ -219,6 +219,7 @@ var OlarkObserver = (function(OO, document, window) {
         offScreenContainer.style.top = '-100em';
         offScreen = document.createElement('p');
         offScreen.id = "olark-observer-offscreen";
+        offScreen.style.fontSize = "14px";
 
         offScreenContainer.appendChild(offScreen);
         document.body.appendChild(offScreenContainer);
@@ -232,7 +233,11 @@ var OlarkObserver = (function(OO, document, window) {
     function showFeedback(message) {
         debugLog(message);
         offScreen.textContent = message;
-        debugLog("message width: ", offScreen.scrollWidth);
+        statusText.textContent = "";
+        feedbackEl.width = offScreen.scrollWidth;
+        window.setTimeout(function(){
+            statusText.textContent = message;
+        }, 1000);
     }
 
     /* Start observers observing */
