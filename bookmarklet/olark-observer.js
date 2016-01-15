@@ -232,9 +232,11 @@ var OlarkObserver = (function(OO, document, window) {
 
     function showFeedback(message) {
         debugLog(message);
-        offScreen.textContent = message;
         statusText.textContent = "";
-        feedbackEl.width = offScreen.scrollWidth;
+
+        offScreen.textContent = message;
+        feedbackEl.width = (offScreen.scrollWidth+15) + "px";
+
         window.setTimeout(function(){
             statusText.textContent = message;
         }, 1000);
