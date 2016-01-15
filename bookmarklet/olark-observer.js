@@ -1,4 +1,4 @@
-var OlarkObserver = (function(OO, document) {
+var OlarkObserver = (function(OO, document, window) {
     'use strict';
 
     if (OO instanceof Object) {
@@ -190,7 +190,7 @@ var OlarkObserver = (function(OO, document) {
         }
         feedbackEl.firstChild.textContent = message;
         feedbackEl.style.transform = "translateY(0em)";
-        document.setTimeout(function(){
+        window.setTimeout(function(){
             feedbackEl.style.transform = "translateY(3em)";
         }, 4000);
     }
@@ -225,4 +225,4 @@ var OlarkObserver = (function(OO, document) {
         unregister: unregister,
         setDebugMode: setDebugMode
     };
-}(OlarkObserver, document));
+}(OlarkObserver, document, window));
