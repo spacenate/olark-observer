@@ -5,14 +5,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver,
         chatTabObserver,
         chatListObserver,
-        linkObserver,
-        feedbackEl,
-        statusIndicator,
-        statusText,
-        redColor = '#d65129',
-        yellowColor = '#f9cb32',
-        greenColor = '#88de68';
-
+        linkObserver;
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
@@ -163,10 +156,19 @@ var OlarkObserver = (function(OO, document, window) {
         }
     }
 
+    var feedbackEl,
+        statusIndicator,
+        statusText,
+        offScreen,
+        redColor = '#d65129',
+        yellowColor = '#f9cb32',
+        greenColor = '#88de68';
+
     function createFeedbackElement() {
         if ((feedbackEl = document.getElementById('olark-observer')) instanceof Object) {
             statusIndicator = document.getElementById('olark-observer-status-indicator');
             statusText = document.getElementById('olark-observer-status-text');
+            offScreen = document.getElementById('olark-observer-offscreen');
             return;
         }
         /* olark-observer-container */
@@ -178,44 +180,50 @@ var OlarkObserver = (function(OO, document, window) {
         container.style.paddingBottom = '18px';
 
         /* olark-observer */
-        var inner = document.createElement('div');
-        inner.id = 'olark-observer';
-        inner.style.display = 'inline-block';
-        inner.style.width = '156px';
-        inner.style.padding = '7px 14px';
-        inner.style.borderRadius = '19px';
-        inner.style.backgroundColor = 'rgba(255,255,255,0.1)';
-        inner.style.color = '#fff';
-        inner.style.fontSize = '14px';
-        inner.style.transition = 'transform 1s width 1s';
-        inner.style.transform = 'translateY(4em)';
+        feedbackEl = document.createElement('div');
+        feedbackEl.id = 'olark-observer';
+        feedbackEl.style.display = 'inline-block';
+        feedbackEl.style.width = '156px';
+        feedbackEl.style.padding = '7px 14px';
+        feedbackEl.style.borderRadius = '19px';
+        feedbackEl.style.backgroundColor = 'rgba(255,255,255,0.1)';
+        feedbackEl.style.color = '#fff';
+        feedbackEl.style.fontSize = '14px';
+        feedbackEl.style.transition = 'transform 1s width 1s';
+        feedbackEl.style.transform = 'translateY(4em)';
         /* status-indicator */
-        var indicator = document.createElement('span');
-        indicator.id = 'olark-observer-status-indicator';
-        indicator.style.float = 'right';
-        indicator.style.position = 'relative';
-        indicator.style.top = '3px';
-        indicator.style.left = '4px';
-        indicator.style.height = '9px';
-        indicator.style.width = '9px';
-        indicator.style.borderRadius = '10px';
-        indicator.style.backgroundColor = redColor;
+        statusIndicator = document.createElement('span');
+        statusIndicator.id = 'olark-observer-status-indicator';
+        statusIndicator.style.float = 'right';
+        statusIndicator.style.position = 'relative';
+        statusIndicator.style.top = '3px';
+        statusIndicator.style.left = '4px';
+        statusIndicator.style.height = '9px';
+        statusIndicator.style.width = '9px';
+        statusIndicator.style.borderRadius = '10px';
+        statusIndicator.style.backgroundColor = redColor;
         /* status-text */
-        var text = document.createElement('span');
-        text.id = 'olark-observer-status-text';
-        text.style.float = 'right';
-        text.style.marginRight = '5px';
+        statusText = document.createElement('span');
+        statusText.id = 'olark-observer-status-text';
+        statusText.style.float = 'right';
+        statusText.style.marginRight = '5px';
 
-        inner.appendChild(indicator);
-        inner.appendChild(text);
-        container.appendChild(inner);
+        feedbackEl.appendChild(statusIndicator);
+        feedbackEl.appendChild(statusText);
+        container.appendChild(feedbackEl);
         document.body.appendChild(container);
 
-        statusIndicator = indicator;
-        statusText = text;
-        feedbackEl = inner;
+        /* off screen 'test sizing' area */
+        var offScreenContainer = document.createElement('div');
+        offScreenContainer.style.position = 'absolute';
+        offScreenContainer.style.top = '-100em';
+        offScreen = document.createElement('p');
+        offScreen.id = "olark-observer-offscreen";
 
-        text.textContent = 'Connecting to server...';
+        offScreenContainer.appendChild(offScreen);
+        document.body.appendChild(offScreenContainer);
+
+        statusText.textContent = 'Connecting to server...';
         window.setTimeout(function(){
             feedbackEl.style.transform = 'translateY(0em)';
         }, 0);
@@ -223,20 +231,9 @@ var OlarkObserver = (function(OO, document, window) {
 
     function showFeedback(message) {
         debugLog(message);
-        //statusText.textContent = message;
+        offScreen.textContent = message;
+        debugLog("message width: ", offScreen.scrollWidth);
     }
-
-    /* Find width of element, then animate on to page
-    var offScreen = document.createElement('div');
-    offScreen.style.position = 'absolute';
-    offScreen.style.top = '-100em';
-    document.body.appendChild(offScreen);
-
-    var p = document.createElement('p');
-    p.textContent = 'Some string';
-    offScreen.appendChild(p);
-    p.scrollWidth;
-    */
 
     /* Start observers observing */
     createFeedbackElement();
@@ -248,9 +245,9 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver.observe(statusPanelEl, {childList: true});
         chatListObserver.observe(activeChatsEl, { childList: true});
         linkObserver.observe(document.querySelector('head'), {childList: true});
-        showFeedback('Olark Observer loaded!');
+        debugLog('Observing!');
     } else {
-        showFeedback('Olark Observer loaded~')
+        debugLog('Not observing.');
     }
 
     return {
