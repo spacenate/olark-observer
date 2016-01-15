@@ -248,7 +248,7 @@ var OlarkObserver = (function(OO, document, window) {
     var retryWaitTime = 500;
 
     function connectToServer() {
-        sendXHR('GET', '/',
+        sendXHR('GET', '',
             function(){
                 showFeedback('Connecting to device...');
                 connectToDevice();
@@ -262,7 +262,7 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
-        sendXHR('GET', '/device',
+        sendXHR('GET', 'device',
             function(e){
                 debugLog(e);
                 showFeedback('Connected');
