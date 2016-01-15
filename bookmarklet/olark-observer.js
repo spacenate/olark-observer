@@ -208,7 +208,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusText.id = 'olark-observer-status-text';
         statusText.style.float = 'right';
         statusText.style.height = '16px';
-        statusText.style.transition = 'opacity .5s';
+        statusText.style.transition = 'opacity .4s';
 
         feedbackEl.appendChild(statusIndicator);
         feedbackEl.appendChild(statusText);
@@ -243,7 +243,7 @@ var OlarkObserver = (function(OO, document, window) {
                 statusText.textContent = message;
                 statusText.style.opacity = '1';
             }, 1000);
-        }, 500);
+        }, 400);
     }
 
     /* Start observers observing */
