@@ -2,12 +2,13 @@ var OlarkObserver = (function(OO, document, window) {
     'use strict';
 
     var debug = false,
-        statusIndicator,
-        statusText,
         statusObserver,
         chatTabObserver,
         chatListObserver,
         linkObserver,
+        feedbackEl,
+        statusIndicator,
+        statusText,
         redColor = "#d65129",
         yellowColor = "#f9cb32",
         greenColor = "#88de68";
@@ -163,15 +164,19 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function createFeedbackElement() {
-        if ((inner = document.getElementById('olark-observer')) instanceof Object) {
-            return inner;
+        if ((feedbackEl = document.getElementById('olark-observer')) instanceof Object) {
+            statusIndicator = document.getElementById('olark-observer-status-indicator');
+            statusText = document.getElementById('olark-observer-status-text');
+            return;
         }
         /* olark-observer-container */
         var container = document.createElement('div');
         container.id = "olark-observer-container";
         container.style.position = "absolute";
-        container.style.bottom = "18px";
         container.style.right = "20px";
+        container.style.bottom = "0px";
+        container.style.paddingBottom = "18px";
+
         /* olark-observer */
         var inner = document.createElement('div');
         inner.id = "olark-observer";
@@ -182,7 +187,7 @@ var OlarkObserver = (function(OO, document, window) {
         inner.style.color = "#fff";
         inner.style.fontSize = "14px";
         inner.style.transition = "transform 1s";
-        inner.style.transform = "translateY(3em)";
+        inner.style.transform = "translateY(4em)";
         /* status-indicator */
         var indicator = document.createElement('span');
         indicator.id = "olark-observer-status-indicator";
@@ -200,30 +205,24 @@ var OlarkObserver = (function(OO, document, window) {
         text.style.float = "right";
         text.style.marginRight = "5px";
 
-        text.appendChild(document.createTextNode('Connecting to server...'));
         inner.appendChild(indicator);
         inner.appendChild(text);
         container.appendChild(inner);
         document.body.appendChild(container);
-        return inner;
+
+        statusIndicator = indicator;
+        statusText = text;
+        feedbackEl = inner;
+
+        text.textContent = "Connecting to server...";
+        window.setTimeout(function(){
+            feedbackEl.style.transform = "translateY(0em)";
+        }, 0);
     }
 
     function showFeedback(message) {
         debugLog(message);
-        /*
-        if (!feedbackEl.firstChild) {
-            var messageEl = document.createElement('span');
-            messageEl.style.margin = "0.2em";
-            feedbackEl.appendChild(messageEl);
-        }
-        feedbackEl.firstChild.textContent = message;
-        window.setTimeout(function(){
-            feedbackEl.style.transform = "translateY(0em)";
-        }, 0);
-        window.setTimeout(function(){
-            feedbackEl.style.transform = "translateY(3em)";
-        }, 4000);
-        */
+        //statusText.textContent = message;
     }
 
     /* Find width of element, then animate on to page
