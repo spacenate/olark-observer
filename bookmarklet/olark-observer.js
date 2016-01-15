@@ -9,9 +9,9 @@ var OlarkObserver = (function(OO, document, window) {
         feedbackEl,
         statusIndicator,
         statusText,
-        redColor = "#d65129",
-        yellowColor = "#f9cb32",
-        greenColor = "#88de68";
+        redColor = '#d65129',
+        yellowColor = '#f9cb32',
+        greenColor = '#88de68';
 
 
     if (OO instanceof Object) {
@@ -90,7 +90,7 @@ var OlarkObserver = (function(OO, document, window) {
                 if (newStatus !== false) {
                     sendXHR('PUT', 'status/'+newStatus);
                 } else {
-                    debugLog("Unidentified status icon", newElement.href);
+                    debugLog('Unidentified status icon', newElement.href);
                 }
             }
         });
@@ -153,8 +153,8 @@ var OlarkObserver = (function(OO, document, window) {
 
     function setDebugMode(bool) {
         debug = (bool) ? true : false;
-        var prefix = (debug) ? "en" : "dis";
-        return "Debug mode " + prefix + "abled";
+        var prefix = (debug) ? 'en' : 'dis';
+        return 'Debug mode ' + prefix + 'abled';
     }
 
     function debugLog() {
@@ -171,39 +171,40 @@ var OlarkObserver = (function(OO, document, window) {
         }
         /* olark-observer-container */
         var container = document.createElement('div');
-        container.id = "olark-observer-container";
-        container.style.position = "absolute";
-        container.style.right = "20px";
-        container.style.bottom = "0px";
-        container.style.paddingBottom = "18px";
+        container.id = 'olark-observer-container';
+        container.style.position = 'absolute';
+        container.style.right = '20px';
+        container.style.bottom = '0px';
+        container.style.paddingBottom = '18px';
 
         /* olark-observer */
         var inner = document.createElement('div');
-        inner.id = "olark-observer";
-        inner.style.display = "inline-block";
-        inner.style.padding = "7px 14px";
-        inner.style.borderRadius = "19px";
-        inner.style.backgroundColor = "rgba(255,255,255,0.1)";
-        inner.style.color = "#fff";
-        inner.style.fontSize = "14px";
-        inner.style.transition = "transform 1s";
-        inner.style.transform = "translateY(4em)";
+        inner.id = 'olark-observer';
+        inner.style.display = 'inline-block';
+        inner.style.width = '156px';
+        inner.style.padding = '7px 14px';
+        inner.style.borderRadius = '19px';
+        inner.style.backgroundColor = 'rgba(255,255,255,0.1)';
+        inner.style.color = '#fff';
+        inner.style.fontSize = '14px';
+        inner.style.transition = 'transform 1s width 1s';
+        inner.style.transform = 'translateY(4em)';
         /* status-indicator */
         var indicator = document.createElement('span');
-        indicator.id = "olark-observer-status-indicator";
-        indicator.style.float = "right";
-        indicator.style.position = "relative";
-        indicator.style.top = "3px";
-        indicator.style.left = "4px";
-        indicator.style.height = "9px";
-        indicator.style.width = "9px";
-        indicator.style.borderRadius = "10px";
+        indicator.id = 'olark-observer-status-indicator';
+        indicator.style.float = 'right';
+        indicator.style.position = 'relative';
+        indicator.style.top = '3px';
+        indicator.style.left = '4px';
+        indicator.style.height = '9px';
+        indicator.style.width = '9px';
+        indicator.style.borderRadius = '10px';
         indicator.style.backgroundColor = redColor;
         /* status-text */
         var text = document.createElement('span');
-        text.id = "olark-observer-status-text";
-        text.style.float = "right";
-        text.style.marginRight = "5px";
+        text.id = 'olark-observer-status-text';
+        text.style.float = 'right';
+        text.style.marginRight = '5px';
 
         inner.appendChild(indicator);
         inner.appendChild(text);
@@ -214,9 +215,9 @@ var OlarkObserver = (function(OO, document, window) {
         statusText = text;
         feedbackEl = inner;
 
-        text.textContent = "Connecting to server...";
+        text.textContent = 'Connecting to server...';
         window.setTimeout(function(){
-            feedbackEl.style.transform = "translateY(0em)";
+            feedbackEl.style.transform = 'translateY(0em)';
         }, 0);
     }
 
@@ -227,17 +228,17 @@ var OlarkObserver = (function(OO, document, window) {
 
     /* Find width of element, then animate on to page
     var offScreen = document.createElement('div');
-    offScreen.style.position = "absolute";
-    offScreen.style.top = "-100em";
+    offScreen.style.position = 'absolute';
+    offScreen.style.top = '-100em';
     document.body.appendChild(offScreen);
 
     var p = document.createElement('p');
-    p.textContent = "Some string";
+    p.textContent = 'Some string';
     offScreen.appendChild(p);
     p.scrollWidth;
     */
 
-	/* Start observers observing */
+    /* Start observers observing */
     createFeedbackElement();
 
     var statusPanelEl = document.querySelector('#op-status-panel'),
