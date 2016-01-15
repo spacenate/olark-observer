@@ -174,7 +174,7 @@ var OlarkObserver = (function(OO, document, window) {
         inner.style.backgroundColor = "rgba(255,255,255,0.1)";
         inner.style.borderRadius = "19px";
         inner.style.color = "#fff";
-        inner.style.fontSize = 14px;
+        inner.style.fontSize = "14px";
         inner.style.transition = "transform 1s";
         inner.style.transform = "translateY(3em)";
         /* status-indicator */
@@ -194,7 +194,7 @@ var OlarkObserver = (function(OO, document, window) {
         text.style.float = "right";
         text.style.margin-right = "5px";
         text.textContent = "Connecting to server...";
-        
+
         inner.appendChild(indicator);
         inner.appendChild(text);
         container.appendChild(inner);
