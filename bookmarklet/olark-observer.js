@@ -265,8 +265,14 @@ var OlarkObserver = (function(OO, document, window) {
         sendXHR('GET', 'device',
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
-                debugLog(response);
-                showFeedback('Connected');
+                if (response.result === 'ACK') {
+                    showFeedback('Connected');
+                    retryWaitTime = 500;
+                } else {
+                    debugLog(response);
+                    window.setTimeout(connectToDevice, retryWaitTime);
+                    retryWaitTime *= 1.5;
+                }
             },
             function(){
                 debugLog('Error connecting to server');
