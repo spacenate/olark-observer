@@ -235,7 +235,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusText.textContent = "";
 
         offScreen.textContent = message;
-        feedbackEl.width = (offScreen.scrollWidth+15) + "px";
+        feedbackEl.style.width = (offScreen.scrollWidth+15) + "px";
 
         window.setTimeout(function(){
             statusText.textContent = message;
