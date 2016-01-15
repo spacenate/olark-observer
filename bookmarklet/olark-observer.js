@@ -146,9 +146,6 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function setDebugMode(bool) {
-        if (bool === null) {
-            bool = true;
-        }
         debug = (bool) ? true : false;
         var prefix = (debug) ? "en" : "dis";
         return "Debug mode " + prefix + "abled";
@@ -185,6 +182,7 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function showFeedback(message) {
+        debugLog(message);
         if (!feedbackEl.firstChild) {
             var messageEl = document.createElement('p');
             messageEl.style.margin = "0.2em";
