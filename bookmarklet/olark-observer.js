@@ -1,13 +1,6 @@
 var OlarkObserver = (function(OO, document, window) {
     'use strict';
 
-    if (OO instanceof Object) {
-        // OlarkObserver is already injected
-        // Debug behavior - unregister old listeners,
-        // and proceed to load new OlarkObserver object
-        OO.unregister();
-    }
-
     var debug = false,
         feedbackEl = createFeedbackElement(),
         statusObserver,
@@ -15,6 +8,13 @@ var OlarkObserver = (function(OO, document, window) {
         chatListObserver,
         linkObserver,
         observers = [statusObserver,chatTabObserver,chatListObserver,linkObserver];
+
+    if (OO instanceof Object) {
+        // OlarkObserver is already injected
+        // Debug behavior - unregister old listeners,
+        // and proceed to load new OlarkObserver object
+        debug = OO.unregister();
+    }
 
     /* Operator status changes */
     var statusObserver = new MutationObserver(function(mutations) {
@@ -142,6 +142,7 @@ var OlarkObserver = (function(OO, document, window) {
             debugLog('Disconnecting', observers[i]);
             observers[i].disconnect();
         }
+        return debug;
     }
 
     function setDebugMode(bool) {
@@ -150,7 +151,7 @@ var OlarkObserver = (function(OO, document, window) {
         }
         debug = (bool) ? true : false;
         var prefix = (debug) ? "en" : "dis";
-        console.log("Debug mode " + prefix + "abled");
+        return "Debug mode " + prefix + "abled";
     }
 
     function debugLog() {
