@@ -245,7 +245,8 @@ var OlarkObserver = (function(OO, document, window) {
         }, 400);
     }
 
-    var retryWaitTime = 500;
+    var retryWaitTime = 1200,
+        retryIncrement = 1.1;
 
     function connectToServer() {
         sendXHR('GET', '',
@@ -253,12 +254,12 @@ var OlarkObserver = (function(OO, document, window) {
                 statusIndicator.style.backgroundColor = yellowColor;
                 showFeedback('Connecting to device...');
                 connectToDevice();
-                retryWaitTime = 500;
+                retryWaitTime = 800;
             },
             function(){
                 debugLog('Error connecting to server');
                 window.setTimeout(connectToServer, retryWaitTime);
-                retryWaitTime *= 1.5;
+                retryWaitTime *= retryIncrement;
             });
     }
 
@@ -269,11 +270,11 @@ var OlarkObserver = (function(OO, document, window) {
                 if (response.result === 'ACK') {
                     statusIndicator.style.backgroundColor = greenColor;
                     showFeedback('Connected');
-                    retryWaitTime = 500;
+                    retryWaitTime = 1200;
                 } else {
                     debugLog(response);
                     window.setTimeout(connectToDevice, retryWaitTime);
-                    retryWaitTime *= 1.5;
+                    retryWaitTime *= retryIncrement;
                 }
             },
             function(){
