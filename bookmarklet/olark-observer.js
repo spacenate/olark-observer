@@ -6,7 +6,11 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver,
         chatTabObserver,
         chatListObserver,
-        linkObserver;
+        linkObserver,
+        redColor = "#d65129",
+        yellowColor = "#f9cb32",
+        greenColor = "#88de68";
+
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
@@ -170,7 +174,7 @@ var OlarkObserver = (function(OO, document, window) {
         /* olark-observer */
         var inner = document.createElement('div');
         inner.id = "olark-observer";
-        inner.style.padding = "7px 0 7px 14px";
+        inner.style.padding = "7px 14px 7px 0";
         inner.style.backgroundColor = "rgba(255,255,255,0.1)";
         inner.style.borderRadius = "19px";
         inner.style.color = "#fff";
@@ -187,7 +191,7 @@ var OlarkObserver = (function(OO, document, window) {
         indicator.style.position = "relative";
         indicator.style.top = "3px";
         indicator.style.left = "4px";
-        indicator.style.backgroundColor = "#aaa";
+        indicator.style.backgroundColor = redColor;
         /* status-text */
         var text = document.createElement('span');
         text.id = "olark-observer-status-text";
