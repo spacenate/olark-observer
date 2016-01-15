@@ -28,14 +28,13 @@ Then run the server!
 
     python run.py
 
-Because the server will be using the self-signed certificate that was created earlier, you'll need to visit [https://localhost:4443/](https://localhost:4443/) and accept your certificate. You may need to jump through some hoops to do this, but it should only need to be done once (unless you generate a new certificate later).
+Because the server will be using the self-signed certificate that was created earlier, you'll need to visit [https://localhost.spacenate.com:4443/](https://localhost.spacenate.com:4443/) and accept your certificate. You will likely need to "add a permanent exception" for your certificate, and you may need to jump through some hoops to do this. Thankfully, it should only need to be done once (unless you generate a new certificate later).
 
 Now you are ready to load the bookmarklet while using the Olark chat console, and the party is on!
 
 ## USB hardware
 
-The hardware design for the embedded system borrows heavily from the V-USB examples, and it will likely use the V-USB library as well. ATtiny85 seems like a good choice for the microcontroller, with 3 pins and a timer left open after V-USB (I believe/hope).
-
-More to come on that when I find a USB cable to hack up.
+The hardware is made up of an AVR microcontroller (I've chosen the ATtiny85) running the V-USB library for USB communications. You can find the firmware and more details about the hardware in the [olark-observer-hardware](olark-observer-hardware) project.
 
 [bookmarklet]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/spacenate/olark-observer/master/bookmarklet/bookmarklet.html
+[olark-observer-hardware]: https://github.com/spacenate/olark-observer-hardware
