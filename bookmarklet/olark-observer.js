@@ -89,6 +89,12 @@ var OlarkObserver = (function(OO, document, window) {
             }
         });
     });
+	
+	function getCurrentStatusIcon() {
+		var links = document.head.getElementsByTagName('link');
+		return hashString(links[links.length-1]);
+	}
+	
     /* @todo: slim down this list to one image per status */
     function identifyImage(imgHash) {
         switch (imgHash) {
@@ -305,6 +311,7 @@ var OlarkObserver = (function(OO, document, window) {
         disconnect: disconnect,
         setDebugMode: setDebugMode,
         showFeedback: showFeedback,
-		hashString: hashString
+		hashString: hashString,
+		getIcon: getCurrentStatusIcon
     };
 }(OlarkObserver, document, window));
