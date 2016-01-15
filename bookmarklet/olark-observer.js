@@ -237,13 +237,13 @@ var OlarkObserver = (function(OO, document, window) {
         statusText.style.opacity = '0';
         window.setTimeout(function(){
             statusText.textContent = '';
+            offScreen.textContent = message;
             feedbackEl.style.width = (offScreen.scrollWidth + 15) + 'px';
             window.setTimeout(function(){
                 statusText.textContent = message;
                 statusText.style.opacity = '1';
             }, 1000);
         }, 500);
-
     }
 
     /* Start observers observing */
