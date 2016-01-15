@@ -139,6 +139,7 @@ var OlarkObserver = (function(OO, document, window) {
     function unregister() {
         debugLog('Disconnecting observers');
         for (var i=0; i<observers.length; i++) {
+            debugLog('Disconnecting', observers[i]);
             observers[i].disconnect();
         }
     }
