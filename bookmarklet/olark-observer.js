@@ -223,6 +223,7 @@ var OlarkObserver = (function(OO, document, window) {
     return {
         send: sendXHR,
         unregister: unregister,
-        setDebugMode: setDebugMode
+        setDebugMode: setDebugMode,
+        showFeedback: showFeedback
     };
 }(OlarkObserver, document, window));
