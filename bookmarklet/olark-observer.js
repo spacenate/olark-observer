@@ -250,6 +250,7 @@ var OlarkObserver = (function(OO, document, window) {
     function connectToServer() {
         sendXHR('GET', '',
             function(){
+                statusIndicator.style.backgroundColor = yellowColor;
                 showFeedback('Connecting to device...');
                 connectToDevice();
                 retryWaitTime = 500;
@@ -266,6 +267,7 @@ var OlarkObserver = (function(OO, document, window) {
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
                 if (response.result === 'ACK') {
+                    statusIndicator.style.backgroundColor = greenColor;
                     showFeedback('Connected');
                     retryWaitTime = 500;
                 } else {
