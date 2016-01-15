@@ -303,6 +303,7 @@ var OlarkObserver = (function(OO, document, window) {
         send: sendXHR,
         disconnect: disconnect,
         setDebugMode: setDebugMode,
-        showFeedback: showFeedback
+        showFeedback: showFeedback,
+		hashString: hashString
     };
 }(OlarkObserver, document, window));
