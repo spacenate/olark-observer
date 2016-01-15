@@ -236,11 +236,11 @@ var OlarkObserver = (function(OO, document, window) {
         debugLog(message);
         statusText.style.opacity = '0';
         window.setTimeout(function(){
-            offScreen.textContent = message;
+            statusText.textContent = '';
             feedbackEl.style.width = (offScreen.scrollWidth + 15) + 'px';
             window.setTimeout(function(){
                 statusText.textContent = message;
-                statusText.opacity = '1';
+                statusText.style.opacity = '1';
             }, 1000);
         }, 500);
 
