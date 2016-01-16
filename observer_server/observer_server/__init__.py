@@ -27,7 +27,7 @@ DEVICE_VENDOR_ID = 0x16C0
 DEVICE_PRODUCT_ID = 0x05DC
 MANUFACTURER_STR = 'Spacenate.com'
 PRODUCT_STR = 'OlarkObserver'
-TRANSFER_LENGTH = 2
+TRANSFER_LENGTH = 1
 
 class USBDevice:
     def __init__(self, vendor=DEVICE_VENDOR_ID, product=DEVICE_PRODUCT_ID):
@@ -41,7 +41,8 @@ class USBDevice:
 
     def set_status(self, status, wValue = 0x0000, wIndex = 0x0000):
         response = self.device.ctrl_transfer(bmRequestType=(USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_IN),
-                                             bRequest=status, wValue=wValue, wIndex=wIndex, data_or_wLength=TRANSFER_LENGTH)
+                                             bRequest=status, wValue=wValue, wIndex=wIndex,
+                                             data_or_wLength=TRANSFER_LENGTH)
         if len(response) != TRANSFER_LENGTH:
             raise IOError('USB communication error')
         return response
