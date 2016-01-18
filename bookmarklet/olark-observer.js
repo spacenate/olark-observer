@@ -89,12 +89,12 @@ var OlarkObserver = (function(OO, document, window) {
             }
         });
     });
-	
+
 	function getCurrentStatusIcon() {
 		var links = document.head.getElementsByTagName('link');
 		return hashString(links[links.length-1].href);
 	}
-	
+
     /* @todo: slim down this list to one image per status */
     function identifyImage(imgHash) {
         switch (imgHash) {
@@ -270,7 +270,11 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
-        sendXHR('GET', 'device',
+        var currentStatus;
+        if ((currentStatus = identifyImage(getCurrentStatusIcon)) === false) {
+            currentStatus = "available";
+        }
+        sendXHR('PUT', currentStatus,
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
                 if (response.result === 'ACK') {
