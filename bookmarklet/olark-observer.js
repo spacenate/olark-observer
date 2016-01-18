@@ -270,11 +270,11 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
-        var currentStatus = "status/";
-        if ((currentStatus += identifyImage(getCurrentStatusIcon)) === false) {
-            currentStatus += "available";
+        var currentStatus;
+        if ((currentStatus = identifyImage(getCurrentStatusIcon)) === false) {
+            currentStatus = "available";
         }
-        sendXHR('PUT', currentStatus,
+        sendXHR('PUT', "status/" + currentStatus,
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
                 if (response.result === 'ACK') {
