@@ -270,9 +270,9 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
-        var currentStatus;
-        if ((currentStatus = identifyImage(getCurrentStatusIcon)) === false) {
-            currentStatus = "available";
+        var currentStatus = "status/";
+        if ((currentStatus += identifyImage(getCurrentStatusIcon)) === false) {
+            currentStatus += "available";
         }
         sendXHR('PUT', currentStatus,
             function(e){
