@@ -260,7 +260,7 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function setStatus(newStatus) {
-        var allowed = array('available', 'away', 'unread', 'at-chat-limit', 'at-busy-limit', 'disconnected', 'reconnecting', 'logout');
+        var allowed = ['available', 'away', 'unread', 'at-chat-limit', 'at-busy-limit', 'disconnected', 'reconnecting', 'logout'];
         if (allowed.indexOf(newStatus) === -1) {
             return debugLog('Invalid status passed to setStatus', newStatus);
         }
