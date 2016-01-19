@@ -5,7 +5,8 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver,
         chatTabObserver,
         chatListObserver,
-        linkObserver;
+        linkObserver,
+        observerObject = {};
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
@@ -30,9 +31,9 @@ var OlarkObserver = (function(OO, document, window) {
         }
 
         if (newStatus) {
-            sendXHR('PUT', 'status/' + newStatus);
+            setStatus(newStatus);
         }
-    })
+    });
 
     /* New unread chats */
     var chatTabObserver = new MutationObserver(function(mutations) {
@@ -50,10 +51,10 @@ var OlarkObserver = (function(OO, document, window) {
 
                 if (mutation.target.classList.contains('unread') && mutation.oldValue.indexOf('unread') === -1) {
                     // mutation.target just added the unread class
-                    sendXHR('PUT', 'chats/' + tabName + '/1');
+                    setStatus('unread');
                 } else if (mutation.target.classList.contains('unread') === false && mutation.oldValue.indexOf('unread') !== -1) {
                     // mutation.target just removed the unread class
-                    sendXHR('PUT', 'chats/' + tabName + '/0');
+                    setStatus(getCurrentStatus());
                 }
             }
         });
@@ -62,7 +63,6 @@ var OlarkObserver = (function(OO, document, window) {
         // iterate over mutations to look for new chats (new child added to #active-chats)
         mutations.forEach(function(mutation) {
             if (mutation.type === 'childList' && mutation.target.id === 'active-chats' && mutation.addedNodes.length > 0) {
-                sendXHR('PUT', 'chats/new/1')
                 var newTab = mutation.addedNodes[0];
                 chatTabObserver.observe(newTab, {attributes: true, attributeOldValue: true});
             }
@@ -82,15 +82,18 @@ var OlarkObserver = (function(OO, document, window) {
 				var imgHash = hashString(newElement.href);
                 var newStatus = identifyImage(imgHash);
                 if (newStatus !== false) {
-                    sendXHR('PUT', 'status/'+newStatus);
-                } else {
-                    debugLog('Unidentified status icon', imgHash);
+                    setStatus(newStatus);
                 }
             }
         });
     });
 
-	function getCurrentStatusIcon() {
+    function getCurrentStatus() {
+        var indicator = document.getElementById('status-indicator');
+        return indicator.className;
+    }
+
+	function getCurrentStatusMenuIcon() {
 		var links = document.head.getElementsByTagName('link');
 		return hashString(links[links.length-1].href);
 	}
@@ -130,15 +133,20 @@ var OlarkObserver = (function(OO, document, window) {
         return debug;
     }
 
+    function debugLog() {
+        if (debug) {
+            console.log.apply(console, arguments);
+        }
+    }
+
     function setDebugMode(bool) {
         debug = (bool) ? true : false;
         var prefix = (debug) ? 'en' : 'dis';
         return 'Debug mode ' + prefix + 'abled';
-    }
-
-    function debugLog() {
         if (debug) {
-            console.log.apply(console, arguments);
+            observerObject.sendXHR = sendXHR;
+            observerObject.setDebugMode = setDebugMode;
+            observerObject.getIcon = getCurrentStatusMenuIcon;
         }
     }
 
@@ -151,15 +159,6 @@ var OlarkObserver = (function(OO, document, window) {
             hash |= 0;
         }
         return hash;
-    }
-
-    function sendXHR(method, newStatus, successCb, errorCb) {
-        debugLog(method, newStatus);
-        var oReq = new XMLHttpRequest();
-        if (successCb instanceof Function) oReq.addEventListener('load', successCb);
-        if (errorCb instanceof Function) oReq.addEventListener('error', errorCb);
-        oReq.open(method, 'https://localhost.spacenate.com:4443/' + newStatus, true);
-        oReq.send();
     }
 
     var feedbackEl,
@@ -251,14 +250,42 @@ var OlarkObserver = (function(OO, document, window) {
         }, 400);
     }
 
+    function sendXHR(method, newStatus, successCb, errorCb) {
+        debugLog(method, newStatus);
+        var oReq = new XMLHttpRequest();
+        if (successCb instanceof Function) oReq.addEventListener('load', successCb);
+        if (errorCb instanceof Function) oReq.addEventListener('error', errorCb);
+        oReq.open(method, 'https://localhost.spacenate.com:4443/' + newStatus, true);
+        oReq.send();
+    }
+
+    function setStatus(newStatus) {
+        var allowed = array('available', 'away', 'unread', 'at-chat-limit', 'at-busy-limit', 'disconnected', 'reconnecting', 'logout');
+        if (allowed.indexOf(newStatus) === -1) {
+            return debugLog('Invalid status passed to setStatus', newStatus);
+        }
+        sendXHR('PUT', 'status/'+newStatus,
+            function(e) {
+                var response = JSON.parse(e.currentTarget.responseText);
+                if (response.result !== 'ACK') {
+                    debugLog('Error encountered while setting status', response);
+                    connectToDevice();
+                }
+            },
+            function(e) {
+                debugLog('Error encountered while setting status', e.currentTarget);
+                connectToServer();
+            });
+    }
+
     var retryWaitTime = 1200,
         retryIncrement = 1.1;
 
     function connectToServer() {
+        showFeedback('Connecting to server...');
         sendXHR('GET', '',
             function(){
                 statusIndicator.style.backgroundColor = yellowColor;
-                showFeedback('Connecting to device...');
                 connectToDevice();
                 retryWaitTime = 800;
             },
@@ -270,11 +297,12 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
+        showFeedback('Connecting to device...');
         var currentStatus;
         if ((currentStatus = identifyImage(getCurrentStatusIcon)) === false) {
-            currentStatus = "available";
+            currentStatus = 'available';
         }
-        sendXHR('PUT', "status/" + currentStatus,
+        sendXHR('PUT', 'status/' + currentStatus,
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
                 if (response.result === 'ACK') {
@@ -309,13 +337,6 @@ var OlarkObserver = (function(OO, document, window) {
 
     createFeedbackElement();
     connectToServer();
-
-    return {
-        send: sendXHR,
-        disconnect: disconnect,
-        setDebugMode: setDebugMode,
-        showFeedback: showFeedback,
-		hashString: hashString,
-		getIcon: getCurrentStatusIcon
-    };
+    observerObject.disconnect = disconnect;
+    return observerObject;
 }(OlarkObserver, document, window));

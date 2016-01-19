@@ -54,52 +54,23 @@ CORS(app)
 def index():
     return jsonify(result='meow')
 
-@app.route('/device', methods=['GET'])
-def checkDeviceStatus():
-    try:
-        device = USBDevice()
-        response = device.set_status(CUSTOM_RQ_STATUS_OFF)
-    except IOError, ex:
-        return jsonify(result='NAK', message=ex.message)
-    if response[0] != CUSTOM_RQ_CONFIRM:
-        return jsonify(result='NAK', message='invalid device response: '+str(response))
-    return jsonify(result='ACK')
-
 @app.route('/status/<status>', methods=['PUT'])
 def updateStatus(status):
     withChats = request.args.get('withChats', '')
     statuses = {
         "available": CUSTOM_RQ_STATUS_AVAIL,
         "away": CUSTOM_RQ_STATUS_UNAVAIL,
+        "unread": CUSTOM_RQ_STATUS_UNREAD,
         "at-chat-limit": CUSTOM_RQ_STATUS_MAXCHATS,
-        "at-busy-limit": CUSTOM_RQ_STATUS_MAXCHATS, # @todo: test behavior
-        "disconnected": CUSTOM_RQ_STATUS_OFF,       # with
-        "reconnecting": CUSTOM_RQ_STATUS_OFF,       # these
-        "logout": CUSTOM_RQ_STATUS_OFF              # status
+        "at-busy-limit": CUSTOM_RQ_STATUS_MAXCHATS,
+        "disconnected": CUSTOM_RQ_STATUS_UNAVAIL,
+        "reconnecting": CUSTOM_RQ_STATUS_UNAVAIL,
+        "logout": CUSTOM_RQ_STATUS_OFF
     }
     if withChats:
         newStatus = CUSTOM_RQ_STATUS_UNREAD
     else:
         newStatus = statuses.get(status, CUSTOM_RQ_STATUS_OFF) # What should default be?
-    try:
-        device = USBDevice()
-        response = device.set_status(newStatus)
-    except IOError, ex:
-        return jsonify(result='NAK', message=ex.message)
-    if response[0] != CUSTOM_RQ_CONFIRM:
-        return jsonify(result='NAK', message='invalid device response: '+str(response))
-    return jsonify(result='ACK')
-
-@app.route('/chats/<tabName>/<int:difference>', methods=['PUT'])
-def updateChats(tabName, difference):
-    # if tabName == 'new': # New chat session
-    # else: # Updating an existing chat session
-    # 1 added a chat
-    # 0 removed a chat
-    if difference == 1:
-        newStatus = CUSTOM_RQ_STATUS_UNREAD
-    else:
-        newStatus = CUSTOM_RQ_STATUS_AVAIL
     try:
         device = USBDevice()
         response = device.set_status(newStatus)
