@@ -5,8 +5,7 @@ var OlarkObserver = (function(OO, document, window) {
         statusObserver,
         chatTabObserver,
         chatListObserver,
-        linkObserver,
-        observerObject = {};
+        linkObserver;
 
     if (OO instanceof Object) {
         // OlarkObserver is already injected
@@ -143,11 +142,6 @@ var OlarkObserver = (function(OO, document, window) {
         debug = (bool) ? true : false;
         var prefix = (debug) ? 'en' : 'dis';
         return 'Debug mode ' + prefix + 'abled';
-        if (debug) {
-            observerObject.sendXHR = sendXHR;
-            observerObject.setDebugMode = setDebugMode;
-            observerObject.getIcon = getCurrentStatusMenuIcon;
-        }
     }
 
     function hashString(string) {
@@ -335,7 +329,11 @@ var OlarkObserver = (function(OO, document, window) {
 
     createFeedbackElement();
     connectToServer();
-    observerObject.disconnect = disconnect;
-    observerObject.setDebug = setDebugMode;
-    return observerObject;
+
+    return {
+        disconnect: disconnect,
+        setDebug: setDebugMode,
+        setStatus: setStatus,
+        getIcon: getCurrentStatusMenuIcon
+    };
 }(OlarkObserver, document, window));
