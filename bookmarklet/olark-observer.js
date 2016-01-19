@@ -224,7 +224,7 @@ var OlarkObserver = (function(OO, document, window) {
         offScreenContainer.appendChild(offScreen);
         document.body.appendChild(offScreenContainer);
 
-        statusText.textContent = 'Connecting to server...';
+        statusText.textContent = 'Meow';
         window.setTimeout(function(){
             feedbackEl.style.transform = 'translateY(0em)';
         }, 0);
@@ -328,6 +328,7 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     createFeedbackElement();
+    showFeedback('Connecting to server...');
     connectToServer();
 
     return {
