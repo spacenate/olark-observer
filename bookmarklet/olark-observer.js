@@ -269,11 +269,13 @@ var OlarkObserver = (function(OO, document, window) {
                 var response = JSON.parse(e.currentTarget.responseText);
                 if (response.result !== 'ACK') {
                     debugLog('Error encountered while setting status', response);
+                    showFeedback('Connecting to device...');
                     connectToDevice();
                 }
             },
             function(e) {
                 debugLog('Error encountered while setting status', e.currentTarget);
+                showFeedback('Connecting to server...');
                 connectToServer();
             });
     }
@@ -282,10 +284,10 @@ var OlarkObserver = (function(OO, document, window) {
         retryIncrement = 1.1;
 
     function connectToServer() {
-        showFeedback('Connecting to server...');
+        statusIndicator.style.backgroundColor = redColor;
         sendXHR('GET', '',
             function(){
-                statusIndicator.style.backgroundColor = yellowColor;
+                showFeedback('Connecting to device...');
                 connectToDevice();
                 retryWaitTime = 800;
             },
@@ -297,7 +299,7 @@ var OlarkObserver = (function(OO, document, window) {
     }
 
     function connectToDevice() {
-        showFeedback('Connecting to device...');
+        statusIndicator.style.backgroundColor = yellowColor;
         sendXHR('PUT', 'status/' + getCurrentStatus(),
             function(e){
                 var response = JSON.parse(e.currentTarget.responseText);
@@ -334,5 +336,6 @@ var OlarkObserver = (function(OO, document, window) {
     createFeedbackElement();
     connectToServer();
     observerObject.disconnect = disconnect;
+    observerObject.setDebug = setDebugMode;
     return observerObject;
 }(OlarkObserver, document, window));
