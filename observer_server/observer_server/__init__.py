@@ -18,7 +18,7 @@ USB_ENDPOINT_OUT = 0x00
 # Custom bRequest byte values
 CUSTOM_RQ_STATUS_OFF = 0x00
 CUSTOM_RQ_STATUS_AVAIL = 0x01
-CUSTOM_RQ_STATUS_UNAVAIL = 0x02
+CUSTOM_RQ_STATUS_AWAY = 0x02
 CUSTOM_RQ_STATUS_MAXCHATS = 0x03
 CUSTOM_RQ_STATUS_UNREAD = 0x04
 CUSTOM_RQ_CONFIRM = 0x22
@@ -59,18 +59,18 @@ def updateStatus(status):
     withChats = request.args.get('withChats', '')
     statuses = {
         "available": CUSTOM_RQ_STATUS_AVAIL,
-        "away": CUSTOM_RQ_STATUS_UNAVAIL,
+        "away": CUSTOM_RQ_STATUS_AWAY,
         "unread": CUSTOM_RQ_STATUS_UNREAD,
         "at-chat-limit": CUSTOM_RQ_STATUS_MAXCHATS,
         "at-busy-limit": CUSTOM_RQ_STATUS_MAXCHATS,
-        "disconnected": CUSTOM_RQ_STATUS_UNAVAIL,
-        "reconnecting": CUSTOM_RQ_STATUS_UNAVAIL,
+        "disconnected": CUSTOM_RQ_STATUS_OFF,
+        "reconnecting": CUSTOM_RQ_STATUS_OFF,
         "logout": CUSTOM_RQ_STATUS_OFF
     }
     if withChats:
         newStatus = CUSTOM_RQ_STATUS_UNREAD
     else:
-        newStatus = statuses.get(status, CUSTOM_RQ_STATUS_OFF) # What should default be?
+        newStatus = statuses.get(status, CUSTOM_RQ_STATUS_OFF)
     try:
         device = USBDevice()
         response = device.set_status(newStatus)
