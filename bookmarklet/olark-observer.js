@@ -106,14 +106,18 @@ var OlarkObserver = (function(OO, document, window) {
             case '1748419166':
             case '-2139276908':
             case '-247468270':
+			case '1291683342':
                 return 'available?withChats=1';
             case '1488560486':
+			case '262363838':
                 return 'available?withChats=2';
             case '713115020':
                 return 'available?withChats=3';
             case '859112101':
+			case '1467009989':
                 return 'away';
             case '744595388':
+			case '716269827':
                 return 'away?withChats=1';
             /* need base64 image for away?withChats=2 */
             case '872779176':
